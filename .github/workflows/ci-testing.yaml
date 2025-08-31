@@ -27,6 +27,12 @@ jobs:
         shell: bash
         run: "pip install 'setuptools<58.0.0'"
 
+      - name: Check versions
+        shell: bash
+        run: |
+          pip --version
+          pip show setuptools
+
       #- name: Run black
       #   run: "black --check --diff ."
 
