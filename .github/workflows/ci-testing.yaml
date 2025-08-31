@@ -43,7 +43,7 @@ jobs:
           path: log.txt
 
       - name: Retrieve training test log
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: training_test_logs
 
