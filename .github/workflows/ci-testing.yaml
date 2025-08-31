@@ -1,0 +1,87 @@
+name: CI testing
+
+on: [push, pull_request]
+
+jobs:
+  legacy-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Downgrade build tools
+        shell: bash
+        run: |
+          pip install --upgrade 'pip<22'
+          pip install 'setuptools<58'
+      - name: Install dependencies
+        run: pip install -r requirements.lock
+      - name: Apply dependency overrides
+        shell: bash
+        run: |
+          pip install --force-reinstall 'aiohttp==3.7.4'
+          pip install 'ray[default]'
+      - name: Training test
+        shell: bash
+        run: |
+          # Launch cartpole experiment and store the last reward of the training
+          python muzero.py cartpole '{"training_steps": 7500}' 2>&1 | tee log.txt
+      - name: Check reward
+        shell: bash
+        run: |
+          # Retrieve last reward
+          BEST_REWARD=$(cat log.txt | sed -n -E 's/^.*reward: ([0-9]+).*$/\1/p' | sort -n | tail -1)
+          # Display best reward
+          echo "Best reward of cartpole training: " $BEST_REWARD
+          # Validate reward value
+          if ((BEST_REWARD < 250)); then
+            exit 1
+          fi
+      - name: Archive log artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: training_test_logs_${{ matrix.python-version }}
+          path: log.txt
+
+  modern-tests:
+    runs-on: ubuntu-latest
+    needs: legacy-tests
+    continue-on-error: true
+    strategy:
+      max-parallel: 2
+      matrix:
+        python-version: ['3.10', '3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies from requirements.in
+        run: pip install -r requirements.in
+      - name: Training test
+        shell: bash
+        run: |
+          # Launch cartpole experiment and store the last reward of the training
+          python muzero.py cartpole '{"training_steps": 7500}' 2>&1 | tee log.txt
+      - name: Check reward
+        shell: bash
+        run: |
+          # Retrieve last reward
+          BEST_REWARD=$(cat log.txt | sed -n -E 's/^.*reward: ([0-9]+).*$/\1/p' | sort -n | tail -1)
+          # Display best reward
+          echo "Best reward of cartpole training: " $BEST_REWARD
+          # Validate reward value
+          if ((BEST_REWARD < 250)); then
+            exit 1
+          fi
+      - name: Archive log artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: training_test_logs_${{ matrix.python-version }}
+          path: log.txt
