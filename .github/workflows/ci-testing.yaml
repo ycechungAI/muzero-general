@@ -23,19 +23,20 @@ jobs:
       - name: Install black
         run: "pip install black[jupyter]"
 
-      - name: Downgrade build tools and dependencies
+      - name: Downgrade build tools
         shell: bash
         run: |
           pip install --upgrade 'pip<22'
           pip install 'setuptools<58'
-          pip install 'aiohttp==3.7.4'
 
-      #- name: Run black
-      #   run: "black --check --diff ."
+      - name: Install dependencies from lockfile
+        run: pip install -r requirements.lock
 
-      - name: Install dependencies
+      - name: Apply dependency overrides
+        shell: bash
         run: |
-          pip install -r requirements.lock
+          pip install --force-reinstall 'aiohttp==3.7.4'
+          pip install 'ray[default]'
 
       - name: Training test
         shell: bash
