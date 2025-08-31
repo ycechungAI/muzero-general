@@ -23,17 +23,12 @@ jobs:
       - name: Install black
         run: "pip install black[jupyter]"
 
-      - name: Downgrade build tools
+      - name: Downgrade build tools and dependencies
         shell: bash
         run: |
           pip install --upgrade 'pip<22'
           pip install 'setuptools<58'
-
-      - name: Check versions
-        shell: bash
-        run: |
-          pip --version
-          pip show setuptools
+          pip install 'aiohttp==3.7.4'
 
       #- name: Run black
       #   run: "black --check --diff ."
@@ -51,13 +46,13 @@ jobs:
       - name: Archive log artifact
         uses: actions/upload-artifact@v4
         with:
-          name: training_test_logs
+          name: training_test_logs_${{ matrix.python-version }}
           path: log.txt
 
       - name: Retrieve training test log
         uses: actions/download-artifact@v4
         with:
-          name: training_test_logs
+          name: training_test_logs_${{ matrix.python-version }}
 
       - name: Check reward
         shell: bash
