@@ -1,6 +1,6 @@
-gym
+gym<0.26
 nevergrad
-numpy
+numpy<2.0
 ray[default]
 seaborn
 tensorboard
