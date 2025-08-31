@@ -37,7 +37,7 @@ jobs:
           python muzero.py cartpole '{"training_steps": 7500}' 2>&1 | tee log.txt
 
       - name: Archive log artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: training_test_logs
           path: log.txt
