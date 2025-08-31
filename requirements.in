@@ -1,8 +1,8 @@
 gym
 nevergrad
 numpy
-ray[default]<3.0
+ray[default]
 seaborn
 tensorboard
-torch<3.0
+torch
 black[jupyter]
