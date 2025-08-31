@@ -23,9 +23,11 @@ jobs:
       - name: Install black
         run: "pip install black[jupyter]"
 
-      - name: Downgrade setuptools
+      - name: Downgrade build tools
         shell: bash
-        run: "pip install 'setuptools<58.0.0'"
+        run: |
+          pip install --upgrade 'pip<22'
+          pip install 'setuptools<58'
 
       - name: Check versions
         shell: bash
