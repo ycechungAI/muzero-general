@@ -5,7 +5,7 @@
 ![license MIT](https://img.shields.io/badge/licence-MIT-green)
 [![discord badge](https://img.shields.io/badge/discord-join-6E60EF)](https://discord.gg/GB2vwsF)
 
-![ci-testing workflow](https://github.com/werner-duvaud/muzero-general/workflows/CI%20testing/badge.svg)
+![ci-testing workflow](https://github.com/ycechungAI/muzero-general/workflows/CI%20testing/badge.svg)
 
 # MuZero General
 
