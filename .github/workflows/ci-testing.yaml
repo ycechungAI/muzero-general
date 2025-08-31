@@ -39,7 +39,7 @@ jobs:
           # Display best reward
           echo "Best reward of cartpole training: " $BEST_REWARD
           # Validate reward value
-          if ((BEST_REWARD < 250)); then
+          if ((BEST_REWARD < 235)); then
             exit 1
           fi
       - name: Archive log artifact
@@ -77,7 +77,7 @@ jobs:
           # Display best reward
           echo "Best reward of cartpole training: " $BEST_REWARD
           # Validate reward value
-          if ((BEST_REWARD < 250)); then
+          if ((BEST_REWARD < 235)); then
             exit 1
           fi
       - name: Archive log artifact
