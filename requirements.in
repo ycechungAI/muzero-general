@@ -1,0 +1,8 @@
+gym
+nevergrad
+numpy
+ray[default]<3.0
+seaborn
+tensorboard
+torch<3.0
+black[jupyter]
