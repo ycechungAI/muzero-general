@@ -9,7 +9,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        python-version: [3.7, 3.8, 3.9]
+        python-version: [3.8, 3.9]
 
     timeout-minutes: 90
     steps:
@@ -22,6 +22,9 @@ jobs:
 
       - name: Install black
         run: "pip install black[jupyter]"
+
+      - name: Downgrade setuptools
+        run: "pip install setuptools<58.0.0"
 
       #- name: Run black
       #   run: "black --check --diff ."
