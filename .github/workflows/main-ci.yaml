@@ -1,0 +1,27 @@
+name: Main CI
+
+on: [push, pull_request]
+
+jobs:
+  run-all-tests:
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        include:
+          - python-version: 3.8
+            install-type: legacy
+          - python-version: 3.9
+            install-type: legacy
+          - python-version: '3.10'
+            install-type: modern
+          - python-version: '3.11'
+            install-type: modern
+          - python-version: '3.12'
+            install-type: modern
+          - python-version: '3.13'
+            install-type: modern
+    uses: ./.github/workflows/reusable-test-workflow.yaml
+    with:
+      python-version: ${{ matrix.python-version }}
+      install-type: ${{ matrix.install-type }}
